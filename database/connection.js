@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-function dbConnect(db) {
-    mongoose.connect(`mongodb://localhost/${db}`, { useNewUrlParser: true });
+async function dbConnect(db) {
+    await mongoose.connect(`mongodb://localhost/${db}`, { useNewUrlParser: true });
     mongoose.Promise = global.Promise;
     mongoose.connection.on("error", error => console.log(error));
 
