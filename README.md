@@ -27,3 +27,50 @@ test("Check jest is working", () => {
 ```
 
 To run this file we type ```npm run test``` in our terminal.
+
+## 3. Testing index
+
+### 3.1 Setting up the controller and route
+
+To begin testing our CRUD resources, we first set up our controller. Note that for now, this is not connected to any database. First create a ```controllers``` directory in the root of the project. Then create ```pokemon_controller.js``` inside that directory.
+
+Inside ```pokemon_controller.js```, we are saving our data inside a variable, rather than a database, and our index method simply responds to any request by returning the pokemon object as json.
+
+```Javascript
+const pokemon = { pokemon: 'pikachu'};
+
+function index(req, res) {
+    res.json(pokemon);
+}
+```
+
+Remember to export the function.
+
+In ```routes.js``` we now set up a route to use this method. We must require in the controller, then set up the route.
+```Javascript
+const PokemonController = require('./controllers/pokemon_controller');
+
+router.get('/pokemon', PokemonController.index);
+```
+
+### 3.2 Setting up the test
+
+We will run our tests out of ```index.test.js```. To start, we will use axios to send HTTP requests to our endpoint.
+
+First we must require in axios.
+```Javascript
+const axios = require('axios');
+```
+
+Then we can write our tests. The first test checks if we are receiving a 200 'OK' response status. The second test check if the response body has the expected data on it. In this case, since we set up our GET '/pokemon' route to return json, we expect to see an object with the 'pokemon' key on it. We do not care which pokemon it is, so we provide a wildcard using regex for the value.
+```Javascript
+test("Axios GET /pokemon returns 200 status", async () => {
+    const response = await axios.get('http://localhost:3000/pokemon');
+    expect(response.status).toBe(200);
+});
+
+test("Axios GET /pokemon returns pokemon object", async () => {
+    const response = await axios.get('http://localhost:3000/pokemon');
+    expect(response.data).toMatchObject({ 'pokemon': /./ })
+});
+```
