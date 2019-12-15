@@ -12,10 +12,19 @@ describe('index tests', () => {
         expect(response.status).toBe(200);
     });
 
+    test('supertest GET /pokemon returns 200 status', () => {
+        request(app).get('/pokemon').expect(200);
+    })
+
     test("Axios GET /pokemon returns pokemon object", async () => {
+        const expected = [{ pokemon: 'pikachu' }];
         const response = await axios.get('http://localhost:3000/pokemon');
-        expect(response.data).toMatchObject({ 'pokemon': /./ })
+        expect(response.data).toEqual(expect.arrayContaining(expected));
     });
+
+    test('supertest GET /pokeon returns pokemon object', () => {
+        request(app).get('/pokemon').expect({ pokemon: 'pikachu' })
+    })
 });
 
 // passes, but Jest does not exit after test complete
