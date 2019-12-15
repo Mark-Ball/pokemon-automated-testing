@@ -26,26 +26,3 @@ describe('index tests', () => {
         request(app).get('/pokemon').expect({ pokemon: 'pikachu' })
     })
 });
-
-// passes, but Jest does not exit after test complete
-// test("Supertest GET /pokemon returns 200 status", async () => {
-//     const response = await request(app).get('/pokemon');
-//     console.log(response);
-// });
-
-// app.get('/user', function (req, res) {
-//     res.status(200).json({ name: 'John' });
-// });
-
-// request(app)
-//     .get('/user')
-//     .expect(200)
-//     .end(function(err, res) {
-//         if (err) throw err;
-//     });
-
-// test('responds with json', function(done) {
-//     request(app)
-//         .get('/user')
-//         .expect(200, done);
-// });
