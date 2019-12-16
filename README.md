@@ -74,3 +74,50 @@ test("Axios GET /pokemon returns pokemon object", async () => {
     expect(response.data).toMatchObject({ 'pokemon': /./ })
 });
 ```
+
+## 4. Testing create
+
+### 4.1 Controller and route
+
+Having set up our controller and routes, we simply add the following code.
+
+To ```pokemon_controller.js```
+```Javascript
+function create(req, res) {
+    pokemon.push(req.body);
+    res.json(req.body);
+}
+```
+
+Then remember to export the ```create``` function.
+
+To ```routes.js```
+```Javascript
+router.post('/pokemon', PokemonController.create);
+```
+
+### 4.2 Setting up the test
+
+We will set up 2 tests of the create method.
+- to test if we are receiving a 200 status response
+- to test if the data we are sending with our post request is used to create a resource
+
+For the first test, we send through an object ```charmanderPost``` using axios. This will hit our route and call the ```create``` method. We then check if the response status we received was a 200.
+
+For the second test, we send a get request to the index. We sent a post request to create a resource in the first test, so in the second test we only need to check if the resource has been created. We check this by sending a get request to the index and checking if the last object in the array is the one we created.
+
+```Javascript
+describe('create tests', () => {
+    const charmanderPost = { pokemon: 'charmander'};
+
+    test("Create returns 200 status", async () => {
+        const response = await axios.post('http://localhost:3000/pokemon', charmanderPost);
+        expect(response.status).toBe(200);
+    })
+
+    test("A post creates the resource", async () => {
+        const response = await axios.get('http://localhost:3000/pokemon');
+        expect(response.data[response.data.length - 1]).toEqual(charmanderPost);
+    })
+})
+```
